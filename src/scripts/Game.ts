@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, Texture } from "pixi.js";
 import { Config } from "./system/Config";
 import { Assets, Sprite } from "pixi.js";
 import Loader from "./system/Loader";
@@ -48,6 +48,11 @@ export default class Game {
       return Sprite.from(res);
     });
     return resource;
+  }
+  //return texture
+  async res(key: string): Promise<Texture> {
+    const texture = await Assets.load(key);
+    return texture;
   }
 
   start() {
