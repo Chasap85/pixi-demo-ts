@@ -24,12 +24,23 @@ export default class GameScene {
     this.createBackground();
     await this.createHero();
     this.createPlatforms(this.game);
+    this.setEvents();
+  }
+
+  setEvents() {
+    Matter.Events.on(
+      this.game.physics,
+      "collisionStart",
+      this.onCollisionStart.bind(this)
+    );
   }
 
   onCollisionStart(event: any) {
+    // console.log("EVENT", event);
     const colliders = [event.pairs[0].bodyA, event.pairs[0].bodyB];
     const hero = colliders.find((body) => body.gameHero);
     const platform = colliders.find((body) => body.gamePlatform);
+    console.log(hero)
     // const powerUp = colliders.find(body => body.gamePowerUp);
 
     if (hero && platform) {
@@ -64,6 +75,10 @@ export default class GameScene {
     this.container.on("pointerdown", () => {
       this.hero.startJump();
     });
+
+    this.hero.sprite.once("die", () => {
+        this.game.start();
+    });
   }
 
   createPlatforms(game: Game) {
@@ -71,7 +86,6 @@ export default class GameScene {
 
     this.container.addChild(platforms.container);
     this.platforms = platforms;
-    console.log(this.platforms)
   }
 
   update(dt: any) {
@@ -82,7 +96,6 @@ export default class GameScene {
   }
 
   destroy() {
-    console.log("a");
     Matter.Events.off(
       this.game.physics,
       "collisionStart",

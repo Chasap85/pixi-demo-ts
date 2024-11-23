@@ -2,6 +2,7 @@ import * as Matter from "matter-js";
 import { AnimatedSprite } from "pixi.js";
 import gsap from "gsap";
 import Game from "../Game";
+import Platform from "./Platform";
 
 export class Hero {
   public game: Game;
@@ -20,7 +21,7 @@ export class Hero {
     this.maxJumps = this.game.config.hero.maxJumps;
     this.jumpIndex = 0;
     this.score = 0;
-    this.startJump = this.startJump.bind(this);
+    // this.startJump = this.startJump.bind(this);
     // keep track of each diamond and corresponding animation instance
     // this.attractedDiamonds = new Map();
   }
@@ -50,12 +51,12 @@ export class Hero {
       this.sprite.height,
       { friction: 0 }
     );
+    console.log(this.body.position.x)
     Matter.World.add(this.game.physics.world, this.body);
     this.body.gameHero = this;
   }
 
   startJump() {
-    console.log("jump");
     if (this.platform || this.jumpIndex === 1) {
       ++this.jumpIndex;
       this.platform = null;
@@ -77,15 +78,14 @@ export class Hero {
   }
 
   update() {
-    // this.sprite.x = this.body.position.x - this.sprite.width / 2;
-    // this.sprite.y = this.body.position.y - this.sprite.height / 2;
+    this.sprite.x = this.body.position.x - this.sprite.width / 2;
+    this.sprite.y = this.body.position.y - this.sprite.height / 2;
     // if (this.powerupActive) {
     //     this.startAttractingDiamonds();
     // }
-    // [14]
-    // if (this.sprite.y > window.innerHeight) {
-    //   this.sprite.emit("die");
-    // }
-    // [/14]
+
+    if (this.sprite.y > window.innerHeight) {
+      this.sprite.emit("die");
+    }
   }
 }
