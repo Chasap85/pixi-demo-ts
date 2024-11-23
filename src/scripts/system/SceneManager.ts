@@ -18,7 +18,7 @@ export default class SceneManger {
       this.scene.destroy();
     }
     this.scene = new this.game.config.scenes[scene](this.game);
-    console.log(this.scene)
+
     this.container.addChild(this.scene.container);
   }
 
