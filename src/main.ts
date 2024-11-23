@@ -1,9 +1,8 @@
-import App from "./scripts/App";
+import Game from "./scripts/Game";
 import { Application } from "pixi.js";
 import gsap from "gsap";
 import PixiPlugin from "gsap/PixiPlugin";
 import * as PIXI from 'pixi.js';
-import * as Matter from 'matter-js';
 
 window.addEventListener("DOMContentLoaded", initGame);
 
@@ -29,6 +28,6 @@ async function init(): Promise<Application> {
 async function initGame() {
   const app = await init();
 
-  const game = new App(app);
+  const game = new Game(app);
   game.start();
 }
