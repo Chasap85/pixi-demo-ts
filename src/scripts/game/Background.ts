@@ -1,4 +1,4 @@
-import { Container, Sprite } from "pixi.js";
+import { Container, Sprite, Ticker } from "pixi.js";
 import Game from "../Game";
 
 export class Background {
@@ -41,15 +41,15 @@ export class Background {
     sprite.x -= offset;
   }
 
-  update(dt: any): void {
-    const offset = this.speed * dt;
+  update(dt:any): void {
+    const offset = this.speed * dt.deltaTime;
 
     this.sprites.forEach((sprite) => {
       this.move(sprite, offset);
     });
   }
 
-  destroy(): void {
+  public destroy(): void {
     this.container.destroy();
   }
 }
