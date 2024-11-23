@@ -1,8 +1,7 @@
 import * as Matter from "matter-js";
-import { Sprite, AnimatedSprite } from "pixi.js";
+import { AnimatedSprite } from "pixi.js";
 import gsap from "gsap";
 import Game from "../Game";
-import GameScene from "./GameScene";
 
 export class Hero {
   public game: Game;
@@ -12,15 +11,16 @@ export class Hero {
   public maxJumps: number;
   public sprite!: AnimatedSprite;
   public body!: any;
+  public platform!: any;
 
   constructor(game: Game) {
     this.game = game;
-    // this.game.app.ticker.add(this.update, this);
+    this.game.app.ticker.add(this.update, this);
     this.dy = this.game.config.hero.jumpSpeed;
     this.maxJumps = this.game.config.hero.maxJumps;
     this.jumpIndex = 0;
     this.score = 0;
-    this.startJump = this.startJump.bind(this)
+    this.startJump = this.startJump.bind(this);
     // keep track of each diamond and corresponding animation instance
     // this.attractedDiamonds = new Map();
   }
@@ -55,15 +55,37 @@ export class Hero {
   }
 
   startJump() {
-    console.log("JUMP");
+    console.log("jump");
+    if (this.platform || this.jumpIndex === 1) {
+      ++this.jumpIndex;
+      this.platform = null;
+      Matter.Body.setVelocity(this.body, { x: 0, y: -this.dy });
+    }
+  }
+
+  stayOnPlatform(platform) {
+    this.platform = platform;
+    this.jumpIndex = 0;
   }
 
   destroy() {
+    console.log("destroy hero");
     this.game.app.ticker.remove(this.update, this);
-    // Matter.World.add(this.game.physics.world, this.body);
+    Matter.World.add(this.game.physics.world, this.body);
     // gsap.killTweensOf(this.sprite);
     this.sprite.destroy();
   }
 
-  update() {}
+  update() {
+    // this.sprite.x = this.body.position.x - this.sprite.width / 2;
+    // this.sprite.y = this.body.position.y - this.sprite.height / 2;
+    // if (this.powerupActive) {
+    //     this.startAttractingDiamonds();
+    // }
+    // [14]
+    // if (this.sprite.y > window.innerHeight) {
+    //   this.sprite.emit("die");
+    // }
+    // [/14]
+  }
 }
