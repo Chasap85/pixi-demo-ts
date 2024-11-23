@@ -15,7 +15,7 @@ export default class SceneManger {
 
   start(scene: string): void {
     if (this.scene) {
-      // this.scene.destroy();
+      this.scene.destroy();
       console.log(scene);
     }
     this.scene = new this.game.config.scenes[scene](this.game);
