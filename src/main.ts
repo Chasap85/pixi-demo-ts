@@ -1,4 +1,4 @@
-import Game from "./scripts/Game";
+import Game from "@/scripts/Game";
 import { Application } from "pixi.js";
 import gsap from "gsap";
 import PixiPlugin from "gsap/PixiPlugin";
