@@ -1,15 +1,15 @@
-import { Sprite } from "pixi.js";
+import { Diamond } from "./Diamond";
 
-interface Diamond {
-  sprite: {
-    x: number;
-    y: number;
-    parent: {
-      x: number;
-      y: number;
-    };
-  };
-}
+// interface Diamond {
+//   sprite: {
+//     x: number;
+//     y: number;
+//     parent: {
+//       x: number;
+//       y: number;
+//     };
+//   };
+// }
 /**
  * @class Diamond Manager
  * @description Diamond Manager class can be used to locate current diamonds
@@ -38,7 +38,7 @@ export class DiamondManager {
    * @param {*} radius Power-up radius or any radius
    * @return {diamond}
    */
-  getNearbyDiamonds(x: number, y: number, radius: number) {
+  async getNearbyDiamonds(x: number, y: number, radius: number): Promise<Diamond[]> {
     if (this.diamonds) {
       return Array.from(this.diamonds).filter((diamond) => {
         if (!diamond) return false;
@@ -54,6 +54,7 @@ export class DiamondManager {
         return distanceSquared <= radiusSquared;
       });
     }
+    return [];
   }
 
   destroy() {

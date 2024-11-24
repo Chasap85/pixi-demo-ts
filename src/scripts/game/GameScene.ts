@@ -5,6 +5,7 @@ import Platforms from "./Platforms";
 import { Container, Ticker } from "pixi.js";
 import { IGameService } from "../system/SceneManager";
 import { app } from "../../main";
+import { LabelScore } from "./LabelScore";
 
 /** Creates main game scene */
 export default class GameScene {
@@ -13,6 +14,7 @@ export default class GameScene {
   public platforms!: Platforms;
   public container: Container;
   public gameService!: IGameService;
+  public labelScore!: LabelScore;
 
   constructor() {
     this.container = new Container();
@@ -28,7 +30,18 @@ export default class GameScene {
     await this.createHero(gameService);
     this.createPlatforms(gameService);
     this.setEvents(gameService);
+    this.createUI(gameService);
     app.ticker.add(this.update, this);
+  }
+
+  createUI(game: IGameService) {
+    this.labelScore = new LabelScore(game);
+    this.container.addChild(this.labelScore);
+    if (this.hero.sprite) {
+      this.hero.sprite.on("score", () => {
+        this.labelScore.renderScore(this.hero.score);
+      });
+    }
   }
 
   private async restartGame(): Promise<void> {
@@ -49,20 +62,20 @@ export default class GameScene {
     const colliders = [event.pairs[0].bodyA, event.pairs[0].bodyB];
     const hero = colliders.find((body) => body.gameHero);
     const platform = colliders.find((body) => body.gamePlatform);
-    const powerUp = colliders.find(body => body.gamePowerUp);
+    const powerUp = colliders.find((body) => body.gamePowerUp);
 
     if (hero && platform) {
       this.hero.stayOnPlatform(platform.gamePlatform!);
     }
 
-    const diamond = colliders.find(body => body.gameDiamond);
+    const diamond = colliders.find((body) => body.gameDiamond);
 
     if (hero && diamond) {
-        this.hero.collectDiamond(diamond.gameDiamond);
+      this.hero.collectDiamond(diamond.gameDiamond);
     }
 
-    if (hero && powerUp){
-        this.hero.activatePowerUp(powerUp.gamePowerUp);
+    if (hero && powerUp) {
+      this.hero.activatePowerUp(powerUp.gamePowerUp);
     }
   }
 

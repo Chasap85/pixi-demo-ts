@@ -4,6 +4,7 @@ import gsap from "gsap";
 import Platform from "./Platform";
 import { IGameService } from "../system/SceneManager";
 import { diamondManager } from "./DiamondManager";
+import { Diamond } from "./Diamond";
 
 export class Hero {
   public game: IGameService;
@@ -15,7 +16,7 @@ export class Hero {
   public body!: Matter.Body;
   public platform!: Platform | null;
   private powerupActive: boolean;
-  private powerField: any;
+  private powerField!: Graphics;
   public attractedDiamonds!: Map<any, any>;
 
   constructor(game: IGameService) {
@@ -75,7 +76,7 @@ export class Hero {
     }
   }
 
-  public collectDiamond(diamond) {
+  public collectDiamond(diamond: Diamond) {
     ++this.score;
     if (this.attractedDiamonds.has(diamond)) {
       const tween = this.attractedDiamonds.get(diamond);
@@ -95,8 +96,9 @@ export class Hero {
     this.powerupActive = true;
 
     this.powerField = new Graphics();
-    this.powerField.fill(0x4287f5, 0.2);
-    this.powerField.drawCircle(0, 0, 300);
+    this.powerField.beginFill(0x4287f5, 0.2);
+        this.powerField.drawCircle(0, 0, 300);
+        this.powerField.endFill();
     this.sprite.addChild(this.powerField);
 
     this.powerField.alpha = 0;
@@ -120,7 +122,7 @@ export class Hero {
 
   destroy(): void {
     Matter.World.add(this.game.physics.world, this.body);
-    // gsap.killTweensOf(this.sprite);
+    gsap.killTweensOf(this.sprite);
     this.sprite.destroy();
   }
 
@@ -147,48 +149,50 @@ export class Hero {
     }
   }
 
-  startAttractingDiamonds() {
+  async startAttractingDiamonds() {
     const heroPosition = {
       x: this.sprite.x + this.sprite.width / 2,
       y: this.sprite.y + this.sprite.height / 2,
     };
 
-    const nearbyDiamonds = diamondManager.getNearbyDiamonds(
+    const nearbyDiamonds = await diamondManager.getNearbyDiamonds(
       heroPosition.x,
       heroPosition.y,
       this.game.config.powerUp.radius
     );
 
-    for (const diamond of nearbyDiamonds) {
-      if (this.attractedDiamonds.has(diamond)) continue;
+    if (nearbyDiamonds) {
+      for (const diamond of nearbyDiamonds) {
+        if (this.attractedDiamonds.has(diamond)) continue;
 
-      const tween = gsap.to(
-        {},
-        {
-          duration: 0.6,
-          ease: "power1.in",
-          onUpdate: () => {
-            if (!diamond.body?.destroyed) {
-              diamond.x = gsap.utils.interpolate(
-                diamond.x,
-                this.sprite.x - diamond.parent.x,
-                0.05
-              );
-              diamond.y = gsap.utils.interpolate(
-                diamond.y,
-                this.sprite.y - diamond.parent.y,
-                0.5
-              );
-            }
-          },
-          onComplete: () => {
-            if (diamond) {
-              this.collectDiamond(diamond);
-            }
-          },
-        }
-      );
-      this.attractedDiamonds.set(diamond, tween);
+        const tween = gsap.to(
+          {},
+          {
+            duration: 0.6,
+            ease: "power1.in",
+            onUpdate: () => {
+              if (diamond.body) {
+                diamond.sprite.x = gsap.utils.interpolate(
+                  diamond.sprite.x,
+                  this.sprite.x - diamond.sprite.parent.x,
+                  0.05
+                );
+                diamond.sprite.y = gsap.utils.interpolate(
+                  diamond.sprite.y,
+                  this.sprite.y - diamond.sprite.parent.y,
+                  0.5
+                );
+              }
+            },
+            onComplete: () => {
+              if (diamond) {
+                this.collectDiamond(diamond);
+              }
+            },
+          }
+        );
+        this.attractedDiamonds.set(diamond, tween);
+      }
     }
   }
 }

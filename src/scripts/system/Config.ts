@@ -1,3 +1,6 @@
+import { TextStyleFontWeight } from "pixi.js";
+
+
 interface ConfigType {
   bgSpeed: number;
   score: {
@@ -5,11 +8,11 @@ interface ConfigType {
     y: number;
     anchor: number;
     style: {
-      fontFamily: string;
-      fontWeight: string;
-      fontSize: number;
-      fill: string[];
-    };
+        fontFamily: string;
+        fontWeight: TextStyleFontWeight;
+        fontSize: number;
+        fill: number | number[];
+      };
   };
   diamonds: {
     chance: number;
@@ -52,7 +55,7 @@ export const Config: ConfigType = {
       fontFamily: "Verdana",
       fontWeight: "bold",
       fontSize: 44,
-      fill: ["#FF7F50"],
+      fill: 0xFF7F50,
     },
   },
   diamonds: {
