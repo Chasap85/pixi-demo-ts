@@ -1,10 +1,11 @@
 import Matter from "matter-js";
-import { AnimatedSprite, Graphics, Sprite } from "pixi.js";
+import { AnimatedSprite, Graphics } from "pixi.js";
 import gsap from "gsap";
 import Platform from "./Platform";
 import { IGameService } from "../system/SceneManager";
 import { diamondManager } from "./DiamondManager";
 import { Diamond } from "./Diamond";
+import { PowerUp } from "./PowerUp";
 
 export class Hero {
   public game: IGameService;
@@ -89,7 +90,7 @@ export class Hero {
     diamond.destroy();
   }
 
-  activatePowerUp(powerUp) {
+  activatePowerUp(powerUp: PowerUp) {
     powerUp.destroy();
     if (this.powerupActive) return;
 
