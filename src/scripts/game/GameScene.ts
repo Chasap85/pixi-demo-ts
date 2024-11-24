@@ -58,9 +58,12 @@ export default class GameScene {
     );
   }
 
-  onCollisionStart(event: Matter.IEventCollision<Matter.Engine>): void {
+  onCollisionStart(event: any): void {
     const colliders = [event.pairs[0].bodyA, event.pairs[0].bodyB];
     const hero = colliders.find((body) => body.gameHero);
+
+    if(!hero) return;
+
     const platform = colliders.find((body) => body.gamePlatform);
     const powerUp = colliders.find((body) => body.gamePowerUp);
 
@@ -91,7 +94,6 @@ export default class GameScene {
 
     this.container.addChild(sprite);
     this.hero = hero;
-
     this.container.interactive = true;
     this.container.on("pointerdown", () => {
       this.hero.startJump();

@@ -14,7 +14,7 @@ export class Hero {
   private dy: number;
   public maxJumps: number;
   public sprite!: AnimatedSprite;
-  public body!: Matter.Body;
+  public body!: any;
   public platform!: Platform | null;
   private powerupActive: boolean;
   private powerField!: Graphics;
@@ -64,12 +64,11 @@ export class Hero {
       friction: 0,
     });
 
-    Matter.World.add(this.game.physics.world, this.body);
     this.body.gameHero = this;
+    Matter.World.add(this.game.physics.world, this.body);
   }
 
   public startJump(): void {
-    console.log(this.jumpIndex);
     if (this.platform || this.jumpIndex === 1) {
       ++this.jumpIndex;
       this.platform = null;
@@ -146,7 +145,7 @@ export class Hero {
       gsap.killTweensOf(this.powerField);
       this.sprite.removeChild(this.powerField);
       this.powerField.destroy();
-      this.powerField = null;
+      this.powerField.clear();
     }
   }
 

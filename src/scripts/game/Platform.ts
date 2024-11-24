@@ -117,6 +117,7 @@ export default class Platform {
       this.height,
       { friction: 0, isStatic: true }
     );
+
     Matter.World.add(this.game.physics.world, this.body);
     this.body.gamePlatform = this;
   }

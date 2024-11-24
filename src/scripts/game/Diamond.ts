@@ -7,7 +7,7 @@ import { app } from "../../main";
 export class Diamond {
   public sprite!: Sprite;
   public game: IGameService;
-  public body!: Matter.Body;
+  public body!: any;
 
   constructor(game: IGameService, x: number, y: number) {
     this.game = game;
