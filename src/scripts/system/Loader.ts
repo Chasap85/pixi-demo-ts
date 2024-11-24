@@ -1,4 +1,4 @@
-import { Assets } from "pixi.js";
+import { Assets, AssetsClass } from "pixi.js";
 
 export default class Loader {
   private manifest = {
@@ -20,11 +20,11 @@ export default class Loader {
     ],
   };
 
-  async init() {
+  async init(): Promise<void> {
     await Assets.init({ manifest: this.manifest });
   }
 
-  async loadGameAssets() {
+  async loadGameAssets(): Promise<AssetsClass> {
     await this.init();
     return Assets.loadBundle("game-assets");
   }

@@ -1,15 +1,15 @@
-import { Container, Sprite, Ticker } from "pixi.js";
-import Game from "../Game";
+import { Container, Sprite } from "pixi.js";
+import { IGameService } from "../system/SceneManager";
 
 export class Background {
-  public game: Game;
+  public game: IGameService;
   public speed: number;
   public container: Container;
   private sprites: Sprite[] = [];
 
-  constructor(game: Game) {
-    this.game = game;
-    this.speed = this.game.config.bgSpeed;
+  constructor(gameService: IGameService) {
+    this.game = gameService;
+    this.speed = gameService.config.bgSpeed;
     this.container = new Container();
     this.createSprites();
   }
@@ -41,8 +41,8 @@ export class Background {
     sprite.x -= offset;
   }
 
-  update(dt:any): void {
-    const offset = this.speed * dt.deltaTime;
+  update(dt:number): void {
+    const offset = this.speed * dt;
 
     this.sprites.forEach((sprite) => {
       this.move(sprite, offset);

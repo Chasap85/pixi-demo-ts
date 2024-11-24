@@ -1,27 +1,26 @@
-import { Container, Sprite, Texture } from "pixi.js";
-import Game from "../Game";
+import { Container } from "pixi.js";
 import { Config } from "../system/Config";
 import Matter from "matter-js";
+import { IGameService } from "../system/SceneManager";
 
 export default class Platform {
-  public game: Game;
+  public game: IGameService;
   public body!: any;
   public container!: Container;
   public diamonds: any;
   public powerUps: any;
-  public rows: number;
-  public cols: number;
-  public tile: any;
-  public tileSize!: number;
-  public width!: number;
-  public height!: number;
-  public dx: number;
+  private rows: number;
+  private cols: number;
+  private tile: any;
+  private tileSize!: number;
+  private width!: number;
+  private height!: number;
+  private dx: number;
 
-  constructor(game: Game, rows: number, cols: number, x: number) {
+  constructor(game: IGameService, rows: number, cols: number, x: number) {
     this.game = game;
     this.diamonds = [];
     this.powerUps = [];
-    // [/10]
 
     this.rows = rows;
     this.cols = cols;
@@ -33,13 +32,13 @@ export default class Platform {
     // this.createPowerUps();
   }
 
-  private async init(x: number) {
+  private async init(x: number): Promise<void> {
     await this.createContainer(x);
     await this.createTiles();
     await this.createBody();
   }
 
-  async createContainer(x: number) {
+  private async createContainer(x: number): Promise<void> {
     this.tile = await this.game.sprite("tile");
     this.tileSize = this.tile.width;
     this.width = this.tileSize * this.cols;
@@ -49,7 +48,7 @@ export default class Platform {
     this.container.y = window.innerHeight - this.height;
   }
 
-  async createTiles() {
+  private async createTiles(): Promise<void> {
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
         await this.createTile(row, col);
@@ -57,7 +56,7 @@ export default class Platform {
     }
   }
 
-  async createTile(row: number, col: number) {
+  private async createTile(row: number, col: number): Promise<void> {
     const texture = row === 0 ? "platform" : "tile";
     const tile = await this.game.sprite(texture);
     tile.x = col * tile.width;
@@ -65,7 +64,7 @@ export default class Platform {
     this.container.addChild(tile);
   }
 
-  async createBody() {
+  private async createBody(): Promise<void> {
     this.body = Matter.Bodies.rectangle(
       this.width / 2 + this.container.x,
       this.height / 2 + this.container.y,
@@ -77,7 +76,7 @@ export default class Platform {
     this.body.gamePlatform = this;
   }
 
-  move() {
+  move(): void {
     if (this.body) {
       Matter.Body.setPosition(this.body, {
         x: this.body.position.x + this.dx,
@@ -88,7 +87,7 @@ export default class Platform {
     }
   }
 
-  destroy() {
+  destroy(): void {
     Matter.World.remove(this.game.physics.world, this.body);
     // this.diamonds.forEach((diamond) => diamond.destroy());
     // this.powerUps.forEach((powerUp) => powerUp.destroy());

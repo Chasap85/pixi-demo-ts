@@ -1,5 +1,3 @@
-import GameScene from "../game/GameScene";
-
 interface ConfigType {
   bgSpeed: number;
   score: {
@@ -41,9 +39,6 @@ interface ConfigType {
     jumpSpeed: number;
     maxJumps: number;
     position: { x: number; y: number };
-  };
-  scenes: {
-    [key: string]: typeof GameScene;
   };
 }
 
@@ -100,8 +95,5 @@ export const Config: ConfigType = {
       x: 350,
       y: 595,
     },
-  },
-  scenes: {
-    "game": GameScene,
   },
 };

@@ -1,15 +1,15 @@
 import { Container } from "pixi.js";
 import Platform from "./Platform";
-import Game from "../Game";
+import { IGameService } from "../system/SceneManager";
 
 export default class Platforms {
   public platforms: Platform[];
   public container: Container;
-  public game: Game;
+  public game: IGameService;
   public ranges!: any;
   public current!: any;
 
-  constructor(game: Game) {
+  constructor(game: IGameService) {
     this.platforms = [];
     this.container = new Container();
     this.game = game;
@@ -18,7 +18,7 @@ export default class Platforms {
     this.createInitialPlatform();
   }
 
-  get randomData() {
+  get randomData(): { rows: number; cols: number; x: number } {
     this.ranges = this.game.config.platforms.ranges;
     let data = { rows: 0, cols: 0, x: 0 };
 
@@ -39,21 +39,21 @@ export default class Platforms {
     return data;
   }
 
-  private async createInitialPlatform() {
+  private async createInitialPlatform(): Promise<void> {
     await this.createPlatform({
       rows: 4,
       cols: 6,
       x: 200,
     });
   }
-  createPlatform(data: { rows: number; cols: number; x: number }) {
+  createPlatform(data: { rows: number; cols: number; x: number }): void {
     const platform = new Platform(this.game, data.rows, data.cols, data.x);
     this.container.addChild(platform.container);
     this.platforms.push(platform);
     this.current = platform;
   }
 
-  update() {
+  update(): void {
     this.platforms.forEach((platform) => platform.move());
     if (
       this.current.container.x + this.current.container.width <
@@ -65,7 +65,7 @@ export default class Platforms {
     // // 06
   }
 
-  destroy() {
+  destroy(): void {
     this.platforms.forEach((platform) => platform.destroy());
     this.container.destroy();
   }

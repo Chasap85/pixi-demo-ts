@@ -1,50 +1,58 @@
-import Game from "../Game";
 import { Background } from "./Background";
 import { Hero } from "./Hero";
-import * as Matter from "matter-js";
+import Matter from "matter-js";
 import Platforms from "./Platforms";
-import { Container } from "pixi.js";
+import { Container, Ticker } from "pixi.js";
+import { IGameService } from "../system/SceneManager";
+import { app } from "../../main";
 
+/** Creates main game scene */
 export default class GameScene {
-  public game: Game;
   public bg!: Background;
   public hero!: Hero;
   public platforms!: Platforms;
   public container: Container;
+  public gameService!: IGameService;
 
-  constructor(game: Game) {
-    this.game = game;
+  constructor() {
     this.container = new Container();
     this.container.interactive = true;
-    this.create();
-    this.update = this.update.bind(this);
-    this.game.app.ticker.add(this.update, this);
-  }
-  async create(): Promise<void> {
-    this.createBackground();
-    await this.createHero();
-    this.createPlatforms(this.game);
-    this.setEvents();
   }
 
-  setEvents() {
+  /** Load up all the game objects */
+  async create(gameService: IGameService): Promise<void> {
+    this.container.removeChildren();
+    this.gameService = gameService;
+
+    this.createBackground(gameService);
+    await this.createHero(gameService);
+    this.createPlatforms(gameService);
+    this.setEvents(gameService);
+    app.ticker.add(this.update, this);
+  }
+
+  private async restartGame(): Promise<void> {
+    this.destroy();
+
+    await this.create(this.gameService);
+  }
+
+  setEvents(game: IGameService): void {
     Matter.Events.on(
-      this.game.physics,
+      game.physics,
       "collisionStart",
       this.onCollisionStart.bind(this)
     );
   }
 
-  onCollisionStart(event: any) {
-    // console.log("EVENT", event);
+  onCollisionStart(event: Matter.IEventCollision<Matter.Engine>): void {
     const colliders = [event.pairs[0].bodyA, event.pairs[0].bodyB];
     const hero = colliders.find((body) => body.gameHero);
     const platform = colliders.find((body) => body.gamePlatform);
-    console.log(hero)
     // const powerUp = colliders.find(body => body.gamePowerUp);
 
     if (hero && platform) {
-      this.hero.stayOnPlatform(platform.gamePlatform);
+      this.hero.stayOnPlatform(platform.gamePlatform!);
     }
 
     // const diamond = colliders.find(body => body.gameDiamond);
@@ -58,14 +66,14 @@ export default class GameScene {
     // }
   }
 
-  createBackground(): void {
-    const bg = new Background(this.game);
+  createBackground(game: IGameService): void {
+    const bg = new Background(game);
     this.container.addChild(bg.container);
     this.bg = bg;
   }
 
-  async createHero(): Promise<void> {
-    const hero = new Hero(this.game);
+  async createHero(game: IGameService): Promise<void> {
+    const hero = new Hero(game);
     const sprite = await hero.createSprite();
 
     this.container.addChild(sprite);
@@ -76,37 +84,36 @@ export default class GameScene {
       this.hero.startJump();
     });
 
-    this.hero.sprite.once("die", () => {
-        this.game.start();
+    this.hero.sprite.once("die", async () => {
+      await this.restartGame();
     });
   }
 
-  createPlatforms(game: Game) {
+  createPlatforms(game: IGameService): void {
     const platforms = new Platforms(game);
 
     this.container.addChild(platforms.container);
     this.platforms = platforms;
   }
 
-  update(dt: any) {
-    this.bg.update(dt);
+  update(dt: Ticker): void {
+    this.bg.update(dt.deltaTime);
+    this.hero.update();
     if (this.platforms) {
       this.platforms.update();
     }
   }
 
-  destroy() {
+  destroy(): void {
     Matter.Events.off(
-      this.game.physics,
+      this.gameService.physics,
       "collisionStart",
       this.onCollisionStart.bind(this)
     );
-    this.game.app.ticker.remove(this.update, this);
-    if (this.bg && this.hero) {
-      this.bg.destroy();
-      this.hero.destroy();
-    }
-    // this.platforms.destroy();
+    if (this.hero) this.hero.destroy();
+    if (this.platforms) this.platforms.destroy();
+    if (this.bg) this.bg.destroy();
+    app.ticker.remove(this.update, this);
     // this.labelScore.destroy();
     // App.diamondManager.destroy();
   }
