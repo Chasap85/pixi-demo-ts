@@ -1,3 +1,6 @@
+import { TextStyleFontWeight } from "pixi.js";
+
+
 interface ConfigType {
   bgSpeed: number;
   score: {
@@ -5,11 +8,11 @@ interface ConfigType {
     y: number;
     anchor: number;
     style: {
-      fontFamily: string;
-      fontWeight: string;
-      fontSize: number;
-      fill: string[];
-    };
+        fontFamily: string;
+        fontWeight: TextStyleFontWeight;
+        fontSize: number;
+        fill: number | number[];
+      };
   };
   diamonds: {
     chance: number;
@@ -40,66 +43,60 @@ interface ConfigType {
     maxJumps: number;
     position: { x: number; y: number };
   };
-  scenes: {
-    [key: string]: typeof GameScene;
-  };
 }
 
 export const Config: ConfigType = {
-    bgSpeed: 2,
-    score: {
-        x: 10,
-        y: 10,
-        anchor: 0,
-        style: {
-            fontFamily: "Verdana",
-            fontWeight: "bold",
-            fontSize: 44,
-            fill: ["#FF7F50"]
-        }
+  bgSpeed: 2,
+  score: {
+    x: 10,
+    y: 10,
+    anchor: 0,
+    style: {
+      fontFamily: "Verdana",
+      fontWeight: "bold",
+      fontSize: 44,
+      fill: 0xFF7F50,
     },
-    diamonds: {
-        chance: 0.4,
-        offset: {
-            min: 100,
-            max: 200
-        }
+  },
+  diamonds: {
+    chance: 0.4,
+    offset: {
+      min: 100,
+      max: 200,
     },
-    powerUp: {
-        chance: 0.5,
-        duration: 5000,
-        radius: 300,
-        offset: {
-            min: 100,
-            max: 500,
-        }
+  },
+  powerUp: {
+    chance: 0.5,
+    duration: 5000,
+    radius: 300,
+    offset: {
+      min: 100,
+      max: 500,
     },
-    platforms: {
-        moveSpeed: -1.5,
-        ranges: {
-            rows: {
-                min: 2,
-                max: 6
-            },
-            cols: {
-                min: 3,
-                max: 9
-            },
-            offset: {
-                min: 60,
-                max: 200
-            }
-        }
+  },
+  platforms: {
+    moveSpeed: -1.5,
+    ranges: {
+      rows: {
+        min: 2,
+        max: 6,
+      },
+      cols: {
+        min: 3,
+        max: 9,
+      },
+      offset: {
+        min: 60,
+        max: 200,
+      },
     },
-    hero: {
-        jumpSpeed: 15,
-        maxJumps: 2,
-        position: {
-            x: 350,
-            y: 595
-        }
+  },
+  hero: {
+    jumpSpeed: 15,
+    maxJumps: 2,
+    position: {
+      x: 350,
+      y: 595,
     },
-    scenes: {
-        "Game": GameScene
-    }
+  },
 };

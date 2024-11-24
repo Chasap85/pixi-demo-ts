@@ -1,13 +1,14 @@
-import App from "./scripts/App";
+import Game from "./scripts/Game";
 import { Application } from "pixi.js";
 import gsap from "gsap";
 import PixiPlugin from "gsap/PixiPlugin";
 import * as PIXI from 'pixi.js';
-import * as Matter from 'matter-js';
 
+/** Share pixi app across application */
+export const app = new Application();
 window.addEventListener("DOMContentLoaded", initGame);
 
-function destroyExistingGame(): void {
+export function destroyExistingGame(): void {
   const game = document.body.children;
   if (game.length > 0) document.body.removeChild(game.item(0) as Node);
 }
@@ -16,7 +17,6 @@ async function init(): Promise<Application> {
   gsap.registerPlugin(PixiPlugin);
   PixiPlugin.registerPIXI(PIXI);
 
-  const app = new Application();
   await app.init({
     autoStart: false,
     resizeTo: window,
@@ -26,9 +26,7 @@ async function init(): Promise<Application> {
   return app;
 }
 
-async function initGame() {
-  const app = await init();
-
-  const game = new App(app);
-  game.start();
+export async function initGame() {
+  await init();
+  new Game(app);
 }
