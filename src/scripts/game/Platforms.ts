@@ -46,7 +46,8 @@ export default class Platforms {
       x: 200,
     });
   }
-  async createPlatform(data: { rows: number; cols: number; x: number }): void {
+
+  async createPlatform(data: { rows: number; cols: number; x: number }): Promise<void> {
     const platform = new Platform(this.game, data.rows, data.cols, data.x);
     this.container.addChild(platform.container);
     this.platforms.push(platform);
