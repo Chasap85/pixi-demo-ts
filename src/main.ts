@@ -1,33 +1,41 @@
-import Game from "./scripts/Game";
-import { Application } from "pixi.js";
-import gsap from "gsap";
-import PixiPlugin from "gsap/PixiPlugin";
+import gsap from 'gsap';
 import * as PIXI from 'pixi.js';
+import PixiPlugin from 'gsap/PixiPlugin';
+import { Application } from "pixi.js";
+import { sceneManager } from "./scripts/system/SceneManager";
+import { initAssets } from "./scripts/system/Loader";
+import { GameScene } from "./scripts/game/GameScene";
 
-window.addEventListener("DOMContentLoaded", initGame);
+/** Share pixi app instance across the project */
+export const app = new Application();
+
+window.addEventListener("DOMContentLoaded", init);
 
 function destroyExistingGame(): void {
   const game = document.body.children;
   if (game.length > 0) document.body.removeChild(game.item(0) as Node);
 }
-async function init(): Promise<Application> {
+
+function initScene(){
+    sceneManager.init();
+}
+
+async function init() {
   destroyExistingGame();
   gsap.registerPlugin(PixiPlugin);
   PixiPlugin.registerPIXI(PIXI);
 
-  const app = new Application();
   await app.init({
     autoStart: false,
     resizeTo: window,
     sharedTicker: true,
   });
+
   document.body.appendChild(app.canvas);
-  return app;
-}
 
-async function initGame() {
-  const app = await init();
+  initScene();
 
-  const game = new Game(app);
-  game.start();
+  await initAssets().then(()=> console.log("assets loaded"))
+
+  await sceneManager.start(GameScene);
 }

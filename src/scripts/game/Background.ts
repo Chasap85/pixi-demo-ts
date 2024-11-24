@@ -1,16 +1,16 @@
 import { Container, Sprite, Ticker } from "pixi.js";
-import Game from "../Game";
+import { Config } from "../system/Config";
+import { Game } from "../Game";
 
 export class Background {
-  public game: Game;
   public speed: number;
   public container: Container;
   private sprites: Sprite[] = [];
 
-  constructor(game: Game) {
-    this.game = game;
-    this.speed = this.game.config.bgSpeed;
+  constructor() {
+    this.speed = Config.bgSpeed;
     this.container = new Container();
+    // this.createSprites();
     this.createSprites();
   }
 
@@ -21,7 +21,7 @@ export class Background {
   }
 
   async createSprite(i: number): Promise<void> {
-    const sprite: Sprite = await this.game.sprite("bg");
+    const sprite: Sprite = await Sprite.from('bg')
     sprite.x = sprite.width * i;
     sprite.y = 0;
 

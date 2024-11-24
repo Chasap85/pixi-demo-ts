@@ -1,61 +1,36 @@
-import { Application, Texture } from "pixi.js";
+import { Application, Container, Texture, Ticker } from "pixi.js";
 import { Config } from "./system/Config";
 import { Assets, Sprite } from "pixi.js";
 import Loader from "./system/Loader";
 import * as Matter from "matter-js";
 import SceneManger from "./system/SceneManager";
+import { Background } from "./game/Background";
+import { app } from "../main";
 
-export default class Game {
-  public readonly app: Application;
-  private loader: Loader;
-  public readonly physics: Matter.Engine;
-  public readonly scenes: SceneManger;
-  public config: typeof Config;
+export class Game {
+  public stage = new Container();
+  // public gameContainer = new Container();
+  public background = new Background();
 
-  constructor(app: Application) {
-    this.app = app;
-    this.config = Config;
+  public isGameOver = false;
 
-    this.loader = new Loader();
-    this.scenes = new SceneManger(this);
-    // diamondManager
-    this.app.stage.interactive = true;
-    this.physics = Matter.Engine.create();
-    this.init();
+  constructor(){
+    this.stage.interactive = true;
+    app.stage.addChild(this.stage);
   }
 
-  private async init() {
-    this.loadAssets();
-    this.app.stage.addChild(this.scenes.container);
-    //physics
-    const runner = Matter.Runner.create();
-    Matter.Runner.run(runner, this.physics);
-    this.start();
+  public init(){
   }
 
-  async loadAssets() {
-    try {
-      await this.loader.loadGameAssets();
-    } catch (error) {
-      console.error("failed to load assets", error);
-    }
-  }
+  // public addToGame(...views: Container[]){
+  //   console.log(...views)
+  //   views.forEach((view)=> {
+  //     this.gameContainer.addChild(view);
+  //   })
+  // }
 
-  // Return sprite
-  async sprite(key: string): Promise<Sprite> {
-    const texture = Assets.load(key);
-    const resource = texture.then((res) => {
-      return Sprite.from(res);
-    });
-    return resource;
-  }
-  //return texture
-  async res(key: string): Promise<Texture> {
-    const texture = await Assets.load(key);
-    return texture;
-  }
+  // pass update to all the game objects
+  public update(dt: number){
 
-  start() {
-    this.scenes.start("game");
   }
 }
