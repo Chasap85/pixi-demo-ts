@@ -49,21 +49,21 @@ export default class GameScene {
     const colliders = [event.pairs[0].bodyA, event.pairs[0].bodyB];
     const hero = colliders.find((body) => body.gameHero);
     const platform = colliders.find((body) => body.gamePlatform);
-    // const powerUp = colliders.find(body => body.gamePowerUp);
+    const powerUp = colliders.find(body => body.gamePowerUp);
 
     if (hero && platform) {
       this.hero.stayOnPlatform(platform.gamePlatform!);
     }
 
-    // const diamond = colliders.find(body => body.gameDiamond);
+    const diamond = colliders.find(body => body.gameDiamond);
 
-    // if (hero && diamond) {
-    //     this.hero.collectDiamond(diamond.gameDiamond);
-    // }
+    if (hero && diamond) {
+        this.hero.collectDiamond(diamond.gameDiamond);
+    }
 
-    // if (hero && powerUp){
-    //     this.hero.activatePowerUp(powerUp.gamePowerUp);
-    // }
+    if (hero && powerUp){
+        this.hero.activatePowerUp(powerUp.gamePowerUp);
+    }
   }
 
   createBackground(game: IGameService): void {
