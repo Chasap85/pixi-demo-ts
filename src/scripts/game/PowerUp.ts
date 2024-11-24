@@ -8,7 +8,6 @@ export class PowerUp {
     public sprite: Sprite;
     public game: IGameService;
     public body!: Matter.Body;
-    private isActive: boolean;
 
     constructor(game:IGameService, x:number, y:number) {
         this.game = game
@@ -16,7 +15,6 @@ export class PowerUp {
         this.sprite.x = x;
         this.sprite.y = y;
 
-        this.isActive = false;
         app.ticker.add(this.update, this);
     }
 

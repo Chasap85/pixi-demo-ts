@@ -75,7 +75,7 @@ export default class GameScene {
     }
 
     if (hero && powerUp) {
-      this.hero.activatePowerUp(powerUp.gamePowerUp);
+      this.hero.activatePowerUp(powerUp.gamePowerUp!);
     }
   }
 
