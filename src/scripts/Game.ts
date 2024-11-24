@@ -1,9 +1,9 @@
 import { Application, Texture } from "pixi.js";
-import { Config } from "./system/Config";
+import { Config } from "@/scripts/system/Config";
 import { Assets, Sprite } from "pixi.js";
-import Loader from "./system/Loader";
+import Loader from "@/scripts/system/Loader";
 import Matter from "matter-js";
-import SceneManger, { IGameService } from "./system/SceneManager";
+import SceneManger, { IGameService } from "@/scripts/system/SceneManager";
 
 /** Game adds gamescene and instantiates main App */
 export default class Game {

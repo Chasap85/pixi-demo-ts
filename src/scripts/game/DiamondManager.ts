@@ -1,15 +1,5 @@
-import { Diamond } from "./Diamond";
+import { Diamond } from "@/scripts/game/Diamond";
 
-// interface Diamond {
-//   sprite: {
-//     x: number;
-//     y: number;
-//     parent: {
-//       x: number;
-//       y: number;
-//     };
-//   };
-// }
 /**
  * @class Diamond Manager
  * @description Diamond Manager class can be used to locate current diamonds

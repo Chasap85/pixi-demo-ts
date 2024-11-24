@@ -1,10 +1,10 @@
 import { Container } from "pixi.js";
-import { Config } from "../system/Config";
+import { Config } from "@/scripts/system/Config";
 import Matter from "matter-js";
-import { IGameService } from "../system/SceneManager";
-import { Diamond } from "./Diamond";
-import { diamondManager } from "./DiamondManager";
-import { PowerUp } from "./PowerUp";
+import { IGameService } from "@/scripts/system/SceneManager";
+import { Diamond } from "@/scripts/game/Diamond";
+import { diamondManager } from "@/scripts/game/DiamondManager";
+import { PowerUp } from "@/scripts/game/PowerUp";
 
 export default class Platform {
   public game: IGameService;

@@ -1,8 +1,8 @@
 import { Sprite } from "pixi.js";
-import { IGameService } from "../system/SceneManager";
+import { IGameService } from "@/scripts/system/SceneManager";
 import Matter from "matter-js";
-import { diamondManager } from "./DiamondManager";
-import { app } from "../../main";
+import { diamondManager } from "@/scripts/game/DiamondManager";
+import { app } from "@/main";
 
 export class Diamond {
   public sprite!: Sprite;

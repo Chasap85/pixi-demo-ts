@@ -1,11 +1,11 @@
 import Matter from "matter-js";
 import { AnimatedSprite, Graphics } from "pixi.js";
 import gsap from "gsap";
-import Platform from "./Platform";
-import { IGameService } from "../system/SceneManager";
-import { diamondManager } from "./DiamondManager";
-import { Diamond } from "./Diamond";
-import { PowerUp } from "./PowerUp";
+import Platform from "@/scripts/game/Platform";
+import { IGameService } from "@/scripts/system/SceneManager";
+import { diamondManager } from "@/scripts/game/DiamondManager";
+import { Diamond } from "@/scripts/game/Diamond";
+import { PowerUp } from "@/scripts/game/PowerUp";
 
 export class Hero {
   public game: IGameService;

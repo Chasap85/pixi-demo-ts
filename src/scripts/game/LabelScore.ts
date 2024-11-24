@@ -1,5 +1,5 @@
 import { Text, TextStyle } from "pixi.js";
-import { IGameService } from "../system/SceneManager";
+import { IGameService } from "@/scripts/system/SceneManager";
 
 export class LabelScore extends Text {
   constructor(game: IGameService) {

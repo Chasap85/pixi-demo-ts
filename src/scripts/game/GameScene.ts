@@ -1,11 +1,11 @@
-import { Background } from "./Background";
-import { Hero } from "./Hero";
+import { Background } from "@/scripts/game/Background"
+import { Hero } from "@/scripts/game/Hero";
 import Matter from "matter-js";
 import Platforms from "./Platforms";
 import { Container, Ticker } from "pixi.js";
-import { IGameService } from "../system/SceneManager";
-import { app } from "../../main";
-import { LabelScore } from "./LabelScore";
+import { IGameService } from "@/scripts/system/SceneManager";
+import { app } from "@/main";
+import { LabelScore } from "@/scripts/game/LabelScore";
 
 /** Creates main game scene */
 export default class GameScene {

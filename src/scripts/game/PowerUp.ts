@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import { Sprite } from "pixi.js";
-import { app } from "../../main";
-import { IGameService } from "../system/SceneManager";
+import { app } from "@/main";
+import { IGameService } from "@/scripts/system/SceneManager";
 import Matter from "matter-js";
 
 export class PowerUp {

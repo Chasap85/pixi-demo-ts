@@ -1,5 +1,5 @@
 import { Container, Sprite } from "pixi.js";
-import { IGameService } from "../system/SceneManager";
+import { IGameService } from "@/scripts/system/SceneManager";
 
 export class Background {
   public game: IGameService;

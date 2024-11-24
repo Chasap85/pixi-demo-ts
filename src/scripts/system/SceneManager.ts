@@ -1,6 +1,6 @@
 import { Application, Container, Sprite, Texture } from "pixi.js";
-import GameScene from "../game/GameScene";
-import { Config } from "./Config";
+import GameScene from "@/scripts/game/GameScene";
+import { Config } from "@/scripts/system/Config";
 
 export interface IGameService {
     app: Application;

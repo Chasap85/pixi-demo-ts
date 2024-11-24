@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
-import Platform from "./Platform";
-import { IGameService } from "../system/SceneManager";
+import Platform from "@/scripts/game/Platform";
+import { IGameService } from "@/scripts/system/SceneManager";
 
 export default class Platforms {
   public platforms: Platform[];
