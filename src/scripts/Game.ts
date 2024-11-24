@@ -2,12 +2,13 @@ import { Application, Texture } from "pixi.js";
 import { Config } from "./system/Config";
 import { Assets, Sprite } from "pixi.js";
 import Loader from "./system/Loader";
-import * as Matter from "matter-js";
-import SceneManger from "./system/SceneManager";
+import Matter from "matter-js";
+import SceneManger, { IGameService } from "./system/SceneManager";
 
+/** Game adds gamescene and instantiates main App */
 export default class Game {
   public readonly app: Application;
-  private loader: Loader;
+  private loader = new Loader();
   public readonly physics: Matter.Engine;
   public readonly scenes: SceneManger;
   public config: typeof Config;
@@ -15,25 +16,31 @@ export default class Game {
   constructor(app: Application) {
     this.app = app;
     this.config = Config;
-
-    this.loader = new Loader();
-    this.scenes = new SceneManger(this);
-    // diamondManager
-    this.app.stage.interactive = true;
     this.physics = Matter.Engine.create();
-    this.init();
+
+    const game: IGameService = {
+      app: this.app,
+      config: this.config,
+      sprite: this.sprite.bind(this),
+      res: this.res.bind(this),
+      physics: this.physics,
+    };
+
+    this.scenes = new SceneManger();
+    this.app.stage.interactive = true;
+    this.init(game);
   }
 
-  private async init() {
+  private init(game: IGameService): void {
     this.loadAssets();
     this.app.stage.addChild(this.scenes.container);
     //physics
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, this.physics);
-    this.start();
+    this.start(game);
   }
 
-  async loadAssets() {
+  async loadAssets(): Promise<void> {
     try {
       await this.loader.loadGameAssets();
     } catch (error) {
@@ -55,7 +62,11 @@ export default class Game {
     return texture;
   }
 
-  start() {
-    this.scenes.start("game");
+  public async start(game: IGameService): Promise<void> {
+    const scene = await this.scenes.start();
+
+    if (scene) {
+      scene.create(game);
+    }
   }
 }
