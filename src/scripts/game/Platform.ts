@@ -136,7 +136,7 @@ export default class Platform {
   destroy(): void {
     Matter.World.remove(this.game.physics.world, this.body);
     this.diamonds.forEach((diamond) => diamond.destroy());
-    // this.powerUps.forEach((powerUp) => powerUp.destroy());
+    this.powerUps.forEach((powerUp:PowerUp) => powerUp.destroy());
     this.container.destroy();
   }
 }

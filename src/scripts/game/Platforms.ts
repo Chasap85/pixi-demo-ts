@@ -39,14 +39,14 @@ export default class Platforms {
     return data;
   }
 
-  private async createInitialPlatform(): Promise<void> {
-    await this.createPlatform({
+  private createInitialPlatform(): void {
+    this.createPlatform({
       rows: 4,
       cols: 6,
       x: 200,
     });
   }
-  createPlatform(data: { rows: number; cols: number; x: number }): void {
+  async createPlatform(data: { rows: number; cols: number; x: number }): void {
     const platform = new Platform(this.game, data.rows, data.cols, data.x);
     this.container.addChild(platform.container);
     this.platforms.push(platform);
@@ -61,8 +61,6 @@ export default class Platforms {
     ) {
       this.createPlatform(this.randomData);
     }
-
-    // // 06
   }
 
   destroy(): void {

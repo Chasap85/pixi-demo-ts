@@ -144,8 +144,8 @@ export class Hero {
     if (this.powerField) {
       gsap.killTweensOf(this.powerField);
       this.sprite.removeChild(this.powerField);
-      this.powerField.destroy();
       this.powerField.clear();
+      this.powerField.destroy();
     }
   }
 

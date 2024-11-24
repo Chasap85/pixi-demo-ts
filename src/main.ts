@@ -6,9 +6,9 @@ import * as PIXI from 'pixi.js';
 
 /** Share pixi app across application */
 export const app = new Application();
-window.addEventListener("DOMContentLoaded", initGame);
+// window.addEventListener("DOMContentLoaded", initGame);
 
-export function destroyExistingGame(): void {
+function destroyExistingGame(): void {
   const game = document.body.children;
   if (game.length > 0) document.body.removeChild(game.item(0) as Node);
 }
@@ -30,3 +30,5 @@ export async function initGame() {
   await init();
   new Game(app);
 }
+
+initGame();
